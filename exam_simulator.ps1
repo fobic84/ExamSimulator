@@ -85,7 +85,7 @@ Function ParseCSV
     # Creating a results variable that we can store which questions were correct
     $Global:results=""
     # Parsing the CSV to create a custom object. I'm doing this so I can change the import type in the future without having to modify the functions
-    Foreach ($question in (Import-Csv C:\temp\exam_simulator1.csv))
+    Foreach ($question in (Import-Csv C:\temp\exam_simulator.csv))
     {
         $object=[pscustomobject] @{
             'Question'=$($question.Question)
@@ -152,9 +152,6 @@ Function EndTest
     $MainForm.Controls.Remove($ExplanationLabel)
     $MainForm.Controls.Remove($ExplanationTextBox)
     Answer -array $Global:array -questionnumber $Global:i
-    #$results="$correct correct`n$incorrect incorrect"
-    #$AnswerLabel.Text="$correct correct`n$incorrect incorrect`n$(([int]$array.Question.count) - $([int]$i + 1)) unanswered"
-    #$MainForm.Controls.Add($AnswerLabel)
     write-host $Global:results
     $QuestionLabel.Text +=$Global:results
 }
@@ -189,7 +186,7 @@ param ($array,
 }
 
 
-Function ShowAnswer
+Function ShowAnswer ### IN PROGRESS ###
 {
 param ($array,
     $questionnumber)
@@ -198,6 +195,16 @@ param ($array,
       #check the checkbox(s)
       $checkboxes[$array[$questionnumber].answer]
 }
+
+
+########################################################################
+#                                                                      #
+# FUTURE FEATURES:                                                     #
+#                                                                      #
+# Jump to Question                                                     #
+# Hypertext to Question from Results                                   #
+#                                                                      #
+########################################################################
 
 #**************************************************************************************************************************
 # Create the GUI
