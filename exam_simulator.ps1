@@ -192,13 +192,25 @@ Function ShowAnswer ### IN PROGRESS ###
 {
 param ($array,
     $questionnumber)
-      #get answer number
-
-      #check the checkbox(s)
-      $box=$checkboxes[$array[$questionnumber].answer]
-      $box.forecolor="Red"
-      $box.Font='10pt, style=Bold'
-      $box.checked=$true
+      
+    if ($array[$questionnumber].Answer.length -lt 2)
+    {
+        $box=$checkboxes[$array[$questionnumber].answer]
+        $box.forecolor="Red"
+        $box.Font='10pt, style=Bold'
+        $box.checked=$true
+    }
+    else
+    {
+        $box1=$checkboxes[[string]$array[$questionnumber].answer[0]]
+        $box1.forecolor="Red"
+        $box1.Font='10pt, style=Bold'
+        $box1.checked=$true
+        $box2=$checkboxes[[string]$array[$questionnumber].answer[1]]
+        $box2.forecolor="Red"
+        $box2.Font='10pt, style=Bold'
+        $box2.checked=$true
+    }
 }
 
 
