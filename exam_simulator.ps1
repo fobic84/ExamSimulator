@@ -151,9 +151,11 @@ Function EndTest
     $QuestionLabel.Text += "Click on Start Exam to begin`n`n"
     $MainForm.Controls.Remove($ExplanationLabel)
     $MainForm.Controls.Remove($ExplanationTextBox)
+    # Check the answer for the final question
     Answer -array $Global:array -questionnumber $Global:i
     write-host $Global:results
-    $QuestionLabel.Text +=$Global:results
+    # Display the results in the GUI. *** Needs to be broken up into columns ***
+    $QuestionLabel.Text += $Global:results
 }
 
 Function NextQuestion
@@ -197,6 +199,36 @@ param ($array,
 }
 
 
+# .Net methods for hiding/showing the console in the background
+Add-Type -Name Window -Namespace Console -MemberDefinition '
+[DllImport("Kernel32.dll")]
+public static extern IntPtr GetConsoleWindow();
+
+[DllImport("user32.dll")]
+public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'
+
+function Display-Console ($option)
+{
+    $consolePtr = [Console.Window]::GetConsoleWindow()
+
+    # Hide = 0,
+    # ShowNormal = 1,
+    # ShowMinimized = 2,
+    # ShowMaximized = 3,
+    # Maximize = 3,
+    # ShowNormalNoActivate = 4,
+    # Show = 5,
+    # Minimize = 6,
+    # ShowMinNoActivate = 7,
+    # ShowNoActivate = 8,
+    # Restore = 9,
+    # ShowDefault = 10,
+    # ForceMinimized = 11
+
+    [Console.Window]::ShowWindow($consolePtr, $option)
+}
+
 ########################################################################
 #                                                                      #
 # FUTURE FEATURES:                                                     #
@@ -205,6 +237,7 @@ param ($array,
 # Hypertext to Question from Results                                   #
 #                                                                      #
 ########################################################################
+
 
 #**************************************************************************************************************************
 # Create the GUI
@@ -251,7 +284,7 @@ $ExplanationTextBox = New-Object System.Windows.Forms.TextBox
 $ExplanationTextBox.Size = New-Object System.Drawing.Size(780,500)
 #$ExplanationTextBox.Location = New-Object System.Drawing.Size(($ExplanationLabel.left),($ExplanationLabel.Bottom + 10))
 #$ExplanationTextBox.Text="Explanation:"
-$ExplanationTextBox.Enabled=$false
+#$ExplanationTextBox.Enabled=$false
 #$MainForm.Controls.Add($ExplanationTextBox)
 
 
@@ -297,10 +330,9 @@ $AnswerLabel.Location = New-Object System.Drawing.Size(($QuestionLabel.left),($Q
 #$AnswerLabel.Text="Explanation:"
 #$MainForm.Controls.Add($AnswerLabel)
 
+Display-Console 0
 $MainForm.Add_Shown({$MainForm.Activate()})
 [void] $MainForm.ShowDialog()
-
-#>
 
 
 <#
