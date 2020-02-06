@@ -162,7 +162,7 @@ Function NextQuestion
 {
     if ($Global:i -eq  $($Global:array.count -1))
     {
-        write-host "no more questions"
+        #write-host "no more questions"
         $MainForm.Controls.Remove($NextQuestionButton)
     }
     else
@@ -178,9 +178,9 @@ Function ShowExplanation
 {
 param ($array,
     $questionnumber)
+
     $MainForm.Controls.Add($ExplanationLabel)
     $MainForm.Controls.Add($ExplanationTextBox)
-    #write-host $Global:CheckBoxes[-1].Bottom
     $ExplanationLabel.Location = New-Object System.Drawing.Size(($QuestionLabel.left),($Global:CheckBoxes[-1].Bottom + 40))
     $ExplanationTextBox.Location = New-Object System.Drawing.Size(($ExplanationLabel.left),($ExplanationLabel.Bottom + 10))
     $ExplanationTextBox.Text=$array[$questionnumber].Explanation
@@ -195,7 +195,8 @@ param ($array,
       #get answer number
 
       #check the checkbox(s)
-      $checkboxes[$array[$questionnumber].answer]
+      $box=$checkboxes[$array[$questionnumber].answer]
+      $box.forecolor="Red"
 }
 
 
@@ -320,7 +321,7 @@ $ShowAnswerButton.Size = New-Object System.Drawing.Size(150,25)
 $ShowAnswerButton.Location = New-Object System.Drawing.Size(15,420)
 $ShowAnswerButton.Text = "Show Answer"
 #$MainForm.Controls.Add($ShowAnswerButton)
-$NextQuestionButton.add_click({ShowAnswer})
+$ShowAnswerButton.add_click({ShowAnswer -array $Global:array -questionnumber $Global:i})
 
 
 #Answer Label
@@ -330,7 +331,7 @@ $AnswerLabel.Location = New-Object System.Drawing.Size(($QuestionLabel.left),($Q
 #$AnswerLabel.Text="Explanation:"
 #$MainForm.Controls.Add($AnswerLabel)
 
-Display-Console 0
+Display-Console 1
 $MainForm.Add_Shown({$MainForm.Activate()})
 [void] $MainForm.ShowDialog()
 
