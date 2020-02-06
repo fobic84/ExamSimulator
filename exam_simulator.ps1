@@ -197,6 +197,8 @@ param ($array,
       #check the checkbox(s)
       $box=$checkboxes[$array[$questionnumber].answer]
       $box.forecolor="Red"
+      $box.Font='10pt, style=Bold'
+      $box.checked=$true
 }
 
 
